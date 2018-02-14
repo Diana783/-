@@ -47,32 +47,32 @@ void selection(int *num, int n)
 	}
 }
 
-int             GT(int & a, int & b)
+int             GT(int & A, int & b)
 {
-	return a > b;
+	return A> b;
 }
 
-int             LT(int & a, int & b)
+int             LT(int & A, int & b)
 {
-	return a < b;
-}
-
-
-int             LE(int & a, int & b)
-{
-	return a <= b;
+	return A < b;
 }
 
 
-int             EQ(int & a, int & b)
-{
-	return a == b;
-}
+//int             LE(int & a, int & b)
+//{
+//	return a <= b;
+//}
+//
+//
+//int             EQ(int & a, int & b)
+//{
+//	return a == b;
+//}
 
-void            SWAP(int & a, int & b)
+void            SWAP(int & A, int & b)
 {
-	int         tmp = a;
-	a = b;
+	int         tmp = A;
+	A = b;
 	b = tmp;
 }
 
@@ -542,12 +542,31 @@ void            MSORT(int A[], int B[], size_t l, size_t r)
 //	}
 //}
 
+void correct(int *A, int size)
+{
+	while (--size > 0)
+		if (A[size - 1] > A[size])
+			return 0;
+	return 1;
+}
+void shuffle(int *A, int size)
+{
+	int i;
+	for (i = 0; i < size; i++)
+		swap(A + i, A + (rand() % size));
+}
+void bogoSort(int *A, int size)
+{
+	while (!correct(A, size))
+		shuffle(A, size);
+}
 
 int main()
 {
 	setlocale(LC_ALL, "Russian");
 	//time_t start, end;
 	int A[10], B[10];
+	int size = 10;
 	int n, *num, *num1, *br, *cr;
 	int l, r;
 	//cr = new int[10];
@@ -556,9 +575,9 @@ int main()
 	cin >> n;
 	l = 0; r = n - 1;
 	num = new int[n]; 
-	num1 = new int[n];
+	/*num1 = new int[n];
 	br = new int[n];
-	cr = new int[10];
+	cr = new int[10];*/
 	generation(A,n);
 
 	/*radix(num1,br,cr,n);
@@ -570,15 +589,35 @@ int main()
 	cout << "\nСортировка слиянием\n";
 	for (int i = 0; i < 10; i++)
 		cout <<A[i] << "\n";
-//	double seconds = difftime(end, start);
-	//printf("The time: %f seconds\n", seconds);
+	double seconds = difftime(end, start);
+	printf("The time: %f seconds\n", seconds);
 
-//	time(&start);
+	time(&start);
 	generation(A, n);
 	HEAPSORT(A,n);
 	cout << "\nПирамидная сортировка\n";
 	for (int i = 0; i < 10; i++)
 		cout << A[i] << "\n";
+	cout << endl;
+
+	for (int i = 0; i<n; i++)
+		A[i] = 1 + rand() % 1000;
+	cout << "Элементы:" << endl;
+	for (int i = 0; i<n; i++)
+		cout << A[i] << "  ";
+	cout << endl;
+	clock_t start = clock();
+	bogoSort(A, n);
+	cout << "\nСортировка \n";
+	for (int i = 0; i < 10; i++)
+		cout << A[i] << "\n";
+	clock_t end = clock();
+	double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+	printf("The time: %f seconds\n", seconds);
+	cout << "Отсортированные элементы:" << endl;
+	for (int i = 0; i<n; i++)
+		cout << A[i] << "  ";
+	cout << endl;
 
 	system("pause");
 	return 0;
